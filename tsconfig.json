@@ -7,7 +7,14 @@
 		"rootDir": "src",
 		"strict": true,
 		"esModuleInterop": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"typeRoots": ["./types", "./node_modules/@types"],
+		"baseUrl": "./src",
+		"paths": {
+			"@user/": ["application/usecases/User"],
+			"@prisma/": ["infrastructure/db/prisma/repositories"],
+			"@memory/": ["infrastructure/db/memory/repositories"]
+		}
 	},
 	"include": ["src", "tests"]
 }

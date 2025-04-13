@@ -1,0 +1,1 @@
+export { MailerAdapter } from './MailerAdapter'
