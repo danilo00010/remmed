@@ -1,6 +1,6 @@
-import { UserRepository } from '../../../domain/repositories/UserRepository'
-import { Hasher } from '../../../domain/services/Hashser'
-import { Token } from '../../../domain/services/Token'
+import { User } from 'domain/entities/User'
+import { UserRepository } from 'domain/repositories/UserRepository'
+import { Token } from 'domain/services/Token'
 
 export class ValidateTokenUseCase {
 	constructor(
@@ -8,20 +8,26 @@ export class ValidateTokenUseCase {
 		private readonly token: Token,
 	) {}
 
-	async execute(token: string): Promise<{ accessToken: string }> {
+	async execute(
+		token: string,
+	): Promise<{ accessToken?: string; newEmail?: string }> {
 		if (!token) throw new Error('Token is required!')
 
 		const user = await this.userRepository.findByVerificationToken(token)
 
 		if (!user) throw new Error('Invalid token!')
 
-		await this.userRepository.update({
-			...user,
-			id: user.id,
-			emailVerifiedAt: new Date(),
-			verificationToken: null,
-			verificationTokenExpiresAt: null,
-		})
+		const decryptedToken = this.token.verify(token)
+
+		if (decryptedToken.tempEmail) {
+			await this.ClearUserVerificationToken(user)
+
+			return {
+				newEmail: decryptedToken.tempEmail,
+			}
+		}
+
+		await this.ClearUserVerificationToken(user)
 
 		const accessToken = this.token.generate({
 			userId: user.id,
@@ -31,5 +37,15 @@ export class ValidateTokenUseCase {
 		return {
 			accessToken,
 		}
+	}
+
+	private async ClearUserVerificationToken(user: User) {
+		await this.userRepository.update({
+			...user,
+			id: user.id,
+			emailVerifiedAt: new Date(),
+			verificationToken: null,
+			verificationTokenExpiresAt: null,
+		})
 	}
 }

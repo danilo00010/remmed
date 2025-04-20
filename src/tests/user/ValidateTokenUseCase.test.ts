@@ -4,7 +4,11 @@ import {
 	ValidateTokenUseCase,
 } from '../../application/usecases/User'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { HasherAdapter, TokenAdapter } from '../../infrastructure/security'
+import {
+	CrypterAdapter,
+	HasherAdapter,
+	TokenAdapter,
+} from '../../infrastructure/security'
 import { FakeMailerAdapter } from './mocks/FakeMailerAdapter'
 
 let createUserUseCase: CreateUserUseCase
@@ -15,8 +19,15 @@ beforeEach(() => {
 	const hasher = new HasherAdapter()
 	const token = new TokenAdapter('testing')
 	const mailer = new FakeMailerAdapter()
+	const crypter = new CrypterAdapter()
 
-	createUserUseCase = new CreateUserUseCase(repo, hasher, token, mailer)
+	createUserUseCase = new CreateUserUseCase(
+		repo,
+		hasher,
+		token,
+		mailer,
+		crypter,
+	)
 	validateTokenUseCase = new ValidateTokenUseCase(repo, token)
 })
 

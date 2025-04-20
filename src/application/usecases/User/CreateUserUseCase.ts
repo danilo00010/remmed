@@ -1,9 +1,10 @@
-import { Hasher } from '../../../domain/services/Hashser'
-import { randomUUID } from 'crypto'
-import { User } from '../../../domain/entities/User'
-import { UserRepository } from '../../../domain/repositories/UserRepository'
-import { Token } from '../../../domain/services/Token'
-import { Mailer } from '../../../domain/services/Mailer'
+import { Hasher } from 'domain/services/Hasher'
+import { User } from 'domain/entities/User'
+import { UserRepository } from 'domain/repositories/UserRepository'
+import { Token } from 'domain/services/Token'
+import { Mailer } from 'domain/services/Mailer'
+import { Crypter } from 'domain/services/Crypter'
+import { ConflictError } from '@errors/'
 
 export class CreateUserUseCase {
 	constructor(
@@ -11,12 +12,13 @@ export class CreateUserUseCase {
 		private readonly hasher: Hasher,
 		private readonly token: Token,
 		private readonly mailer: Mailer,
+		private readonly crypter: Crypter,
 	) {}
 
 	async execute(user: User): Promise<User> {
 		const exists = await this.userRepository.findByEmail(user.email)
 
-		if (exists) throw new Error('User already exists')
+		if (exists) throw new ConflictError('User already exists')
 
 		const hashedPassword = await this.hasher.hash(user.password ?? '')
 
@@ -26,7 +28,7 @@ export class CreateUserUseCase {
 		)
 
 		const newUser: User = {
-			id: randomUUID(),
+			id: this.crypter.randomUUID(),
 			name: user.name,
 			email: user.email,
 			password: hashedPassword,

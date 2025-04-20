@@ -4,6 +4,7 @@ import { PrismaTokenBlacklistRepository } from './infrastructure/db/prisma/repos
 import dotenv from 'dotenv'
 import Fastify from 'fastify'
 import jwt from '@fastify/jwt'
+import rateLimit from '@fastify/rate-limit'
 import UserController from './interface/controllers/UserController'
 
 dotenv.config()
@@ -18,11 +19,20 @@ await fastify.register(jwt, {
 	secret: process.env.JWT_SECRET as string,
 })
 
+await fastify.register(rateLimit, {
+	max: 50,
+	timeWindow: '1 minute',
+})
+
 const server = new FastifyServerAdapter(fastify)
+
+server.get('/', (_, reply) => {
+	reply.send('RemMed API!')
+})
 
 new UserController(server)
 
-fastify.listen({ port: DEFAULT_PORT }, (err, address) => {
+fastify.listen({ port: DEFAULT_PORT, host: '0.0.0.0' }, (err, address) => {
 	if (err) throw err
 	console.log(`Server running at ${address}`)
 })

@@ -4,7 +4,11 @@ import {
 	DeleteUserUseCase,
 } from '../../application/usecases/User'
 import { UserRepository } from 'domain/repositories/UserRepository'
-import { HasherAdapter, TokenAdapter } from '../../infrastructure/security'
+import {
+	HasherAdapter,
+	TokenAdapter,
+	CrypterAdapter,
+} from '../../infrastructure/security'
 import { FakeMailerAdapter } from './mocks/FakeMailerAdapter'
 import { beforeEach, describe, expect, it } from 'vitest'
 
@@ -16,8 +20,15 @@ beforeEach(() => {
 	const hasher = new HasherAdapter()
 	const token = new TokenAdapter('testing')
 	const mailer = new FakeMailerAdapter()
+	const crypter = new CrypterAdapter()
 
-	createUserUseCase = new CreateUserUseCase(repo, hasher, token, mailer)
+	createUserUseCase = new CreateUserUseCase(
+		repo,
+		hasher,
+		token,
+		mailer,
+		crypter,
+	)
 	deleteUserUseCase = new DeleteUserUseCase(repo)
 })
 

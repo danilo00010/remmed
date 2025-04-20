@@ -13,7 +13,8 @@
 		"paths": {
 			"@user/": ["application/usecases/User"],
 			"@prisma/": ["infrastructure/db/prisma/repositories"],
-			"@memory/": ["infrastructure/db/memory/repositories"]
+			"@memory/": ["infrastructure/db/memory/repositories"],
+			"@errors/": ["domain/errors"]
 		}
 	},
 	"include": ["src", "tests"]

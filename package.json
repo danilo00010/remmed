@@ -5,11 +5,13 @@
   "main": "src/main.ts",
   "scripts": {
     "dev": "tsx watch src/main.ts",
+    "prod": "tsx src/main.ts",
     "test": "vitest"
   },
   "dependencies": {
     "@fastify/express": "^4.0.2",
     "@fastify/jwt": "^8.0.1",
+    "@fastify/rate-limit": "^9.1.0",
     "@prisma/client": "^6.5.0",
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.9",
@@ -23,8 +25,10 @@
   "devDependencies": {
     "@types/node": "^20.11.18",
     "@types/nodemailer": "^6.4.17",
+    "nodemon": "^3.1.10",
     "prettier": "^3.5.3",
-    "prisma": "^6.5.0",
+    "prisma": "^6.11.1",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "tsx": "^4.19.3",
     "typescript": "^5.3.3",

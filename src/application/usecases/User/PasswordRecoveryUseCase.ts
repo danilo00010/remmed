@@ -1,6 +1,6 @@
-import { Token } from '../../../domain/services/Token'
-import { UserRepository } from '../../../domain/repositories/UserRepository'
-import { Mailer } from '../../../domain/services/Mailer'
+import { Token } from 'domain/services/Token'
+import { UserRepository } from 'domain/repositories/UserRepository'
+import { Mailer } from 'domain/services/Mailer'
 
 export class PasswordRecoveryUseCase {
 	constructor(
@@ -21,6 +21,12 @@ export class PasswordRecoveryUseCase {
 		const token = this.token.generate({ userId: user.id }, '30m')
 
 		const messageBody = `<p>To recover your password, click <a href="${APP_URL}/change-password?token=${token}">here</a>.</p>`
+
+		await this.userRepository.update({
+			...user,
+			verificationToken: token,
+			verificationTokenExpiresAt: new Date(Date.now() + 30 * 60 * 1000),
+		})
 
 		await this.mailer.sendEmail(user.email, 'Password recovery', messageBody)
 	}

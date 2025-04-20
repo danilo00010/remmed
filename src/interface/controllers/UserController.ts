@@ -1,12 +1,13 @@
-import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
-import type { ChangePasswordType } from '../../shared/types/Forms'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import type { ChangePasswordType } from 'shared/types/Forms'
 
-import { User } from '../../domain/entities/User'
+import { User } from 'domain/entities/User'
 
 import {
 	ChangePasswordController,
 	CreateUserController,
 	DeleteUserController,
+	GetUserByVerificationTokenController,
 	LoginController,
 	LogoutController,
 	PasswordRecoveryController,
@@ -18,6 +19,7 @@ import {
 	ChangePasswordUseCase,
 	CreateUserUseCase,
 	DeleteUserUseCase,
+	GetUserByVerificationTokenUseCase,
 	LoginUseCase,
 	LogoutUseCase,
 	PasswordRecoveryUseCase,
@@ -26,9 +28,15 @@ import {
 } from '@user/'
 
 import { PrismaUserRepository, PrismaTokenBlacklistRepository } from '@prisma/'
-import { MailerAdapter } from '../../infrastructure/email'
-import { HasherAdapter, TokenAdapter } from '../../infrastructure/security'
+import { MailerAdapter } from 'infrastructure/email'
+import {
+	HasherAdapter,
+	TokenAdapter,
+	CrypterAdapter,
+} from 'infrastructure/security'
 import { Server } from 'domain/services/Server'
+import ChangeEmailUseCase from 'application/usecases/User/ChangeEmailUseCase'
+import ChangeEmailController from './UserControllers/ChangeEmailController'
 
 export default class UserController {
 	constructor(server: Server<FastifyRequest, FastifyReply>) {
@@ -37,11 +45,18 @@ export default class UserController {
 		const hasher = new HasherAdapter()
 		const token = new TokenAdapter()
 		const mailer = new MailerAdapter()
+		const crypter = new CrypterAdapter()
 
-		// CREATE
-		const createUseCase = new CreateUserUseCase(userRepo, hasher, token, mailer)
+		// SIGN-UP
+		const createUseCase = new CreateUserUseCase(
+			userRepo,
+			hasher,
+			token,
+			mailer,
+			crypter,
+		)
 		const createUserController = new CreateUserController(createUseCase)
-		server.post('/users', async (request, reply) => {
+		server.post('/sign-up', async (request, reply) => {
 			const user = request.body as User
 
 			const response = await createUserController.handle(user)
@@ -89,6 +104,24 @@ export default class UserController {
 			const [email, password] = atob(authorization).split(':')
 
 			const response = await loginController.handle(email, password)
+
+			reply.code(response.status).send(response.body)
+		})
+
+		// GET USER BY VERIFICATION TOKEN
+		const getUserByVerificationTokenUseCase =
+			new GetUserByVerificationTokenUseCase(userRepo)
+		const getUserByVerificationTokenController =
+			new GetUserByVerificationTokenController(
+				getUserByVerificationTokenUseCase,
+			)
+		server.get('/users', async (request, reply) => {
+			const { verificationToken } = request.query as {
+				verificationToken: string
+			}
+
+			const response =
+				await getUserByVerificationTokenController.handle(verificationToken)
 
 			reply.code(response.status).send(response.body)
 		})
@@ -143,6 +176,24 @@ export default class UserController {
 					...user,
 					id: userId,
 				})
+
+				reply.code(response.status).send(response.body)
+			},
+			{
+				middlewares,
+			},
+		)
+
+		// CHANGE EMAIL
+		const changeEmail = new ChangeEmailUseCase(userRepo, token, mailer)
+		const changeEmailController = new ChangeEmailController(changeEmail)
+		server.post(
+			'/change-email/:userId',
+			async (request, reply) => {
+				const { userId } = request.params as { userId: string }
+				const { newEmail } = request.body as { newEmail: string }
+
+				const response = await changeEmailController.handle(newEmail, userId)
 
 				reply.code(response.status).send(response.body)
 			},

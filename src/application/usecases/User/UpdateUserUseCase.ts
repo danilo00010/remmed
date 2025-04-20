@@ -1,6 +1,7 @@
-import { User } from '../../../domain/entities/User'
-import { UserRepository } from '../../../domain/repositories/UserRepository'
-import { Hasher } from '../../../domain/services/Hashser'
+import { NotFoundError } from '@errors/'
+import { Hasher } from 'domain/services/Hasher'
+import { User } from 'domain/entities/User'
+import { UserRepository } from 'domain/repositories/UserRepository'
 
 export class UpdateUserUseCase {
 	constructor(
@@ -11,7 +12,7 @@ export class UpdateUserUseCase {
 	async execute(newUserData: Partial<User>): Promise<User> {
 		const user = await this.userRepository.findById(newUserData.id as string)
 
-		if (!user) throw new Error('User not found!')
+		if (!user) throw new NotFoundError('User not found!')
 
 		const hashedPassword = newUserData.password
 			? await this.hasher.hash(newUserData.password)

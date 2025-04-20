@@ -1,8 +1,9 @@
 import { Token } from 'domain/services/Token'
-import { User } from '../../../domain/entities/User'
-import { UserRepository } from '../../../domain/repositories/UserRepository'
-import { Hasher } from '../../../domain/services/Hashser'
-import { ChangePasswordType } from '../../../shared/types/Forms'
+import { User } from 'domain/entities/User'
+import { UserRepository } from 'domain/repositories/UserRepository'
+import { Hasher } from 'domain/services/Hasher'
+import { ChangePasswordType } from 'shared/types/Forms'
+import { BadRequestError, NotFoundError } from '@errors/'
 
 export class ChangePasswordUseCase {
 	constructor(
@@ -13,7 +14,7 @@ export class ChangePasswordUseCase {
 
 	async execute(data: ChangePasswordType) {
 		if (data.newPassword !== data.confirmNewPassword)
-			throw new Error("Password and its confirmation don't match")
+			throw new BadRequestError("Password and its confirmation don't match")
 
 		if (data.validationToken) {
 			try {
@@ -25,13 +26,15 @@ export class ChangePasswordUseCase {
 
 		const user = await this.userReporsitory.findById(data.userId)
 
-		if (!user) throw new Error('User not found')
+		if (!user) throw new NotFoundError('User not found')
 
 		const hashedPassword = await this.hasher.hash(data.newPassword)
 
 		return await this.userReporsitory.update({
 			...user,
 			password: hashedPassword,
+			verificationToken: null,
+			verificationTokenExpiresAt: null,
 		})
 	}
 }

@@ -1,6 +1,6 @@
+import { User } from 'domain/entities/User'
 import { CreateUserSchema } from '../../schemas/UserSchema'
 import { CreateUserUseCase } from '@user/'
-import { User } from '../../../domain/entities/User'
 
 export class CreateUserController {
 	constructor(private readonly usecase: CreateUserUseCase) {}
@@ -21,7 +21,7 @@ export class CreateUserController {
 
 			return { status: 201 }
 		} catch (e: any) {
-			return { status: 500, body: { error: e.message } }
+			return { status: e.status ?? 500, body: { error: e.message } }
 		}
 	}
 }

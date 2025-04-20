@@ -1,4 +1,4 @@
-import { Hasher } from '../../domain/services/Hashser'
+import { Hasher } from '../../domain/services/Hasher'
 import bcrypt from 'bcrypt'
 
 export class HasherAdapter implements Hasher {

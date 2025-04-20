@@ -1,9 +1,12 @@
 import { beforeEach, describe, it } from 'vitest'
 import { expect } from 'vitest'
 import { FakeMailerAdapter } from './mocks/FakeMailerAdapter'
-import { HasherAdapter } from '../../infrastructure/security/HasherAdapter'
+import {
+	HasherAdapter,
+	TokenAdapter,
+	CrypterAdapter,
+} from '../../infrastructure/security'
 import { InMemoryUserRepository } from '../../infrastructure/db/memory/repositories'
-import { TokenAdapter } from '../../infrastructure/security/TokenAdapter'
 import {
 	UpdateUserUseCase,
 	CreateUserUseCase,
@@ -18,8 +21,9 @@ beforeEach(() => {
 	const token = new TokenAdapter('testing')
 	const hasher = new HasherAdapter()
 	const mailer = new FakeMailerAdapter()
+	const crypter = new CrypterAdapter()
 
-	createUseCase = new CreateUserUseCase(repo, hasher, token, mailer)
+	createUseCase = new CreateUserUseCase(repo, hasher, token, mailer, crypter)
 	updateUseCase = new UpdateUserUseCase(repo, hasher)
 })
 

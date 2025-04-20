@@ -3,7 +3,11 @@ import {
 	CreateUserUseCase,
 } from '../../application/usecases/User'
 import { InMemoryUserRepository } from '../../infrastructure/db/memory/repositories'
-import { HasherAdapter, TokenAdapter } from '../../infrastructure/security'
+import {
+	HasherAdapter,
+	TokenAdapter,
+	CrypterAdapter,
+} from '../../infrastructure/security'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { User } from '@prisma/client'
 import { FakeMailerAdapter } from './mocks/FakeMailerAdapter'
@@ -17,8 +21,15 @@ beforeEach(() => {
 	const repo = new InMemoryUserRepository()
 	const hasher = new HasherAdapter()
 	const mailer = new FakeMailerAdapter()
+	const crypter = new CrypterAdapter()
 
-	createUserUseCase = new CreateUserUseCase(repo, hasher, token, mailer)
+	createUserUseCase = new CreateUserUseCase(
+		repo,
+		hasher,
+		token,
+		mailer,
+		crypter,
+	)
 	changePasswordUseCase = new ChangePasswordUseCase(repo, token, hasher)
 })
 

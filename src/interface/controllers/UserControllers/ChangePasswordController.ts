@@ -1,6 +1,6 @@
 import { ChangePasswordUseCase } from '@user/'
-import { ChangePasswordType } from '../../../shared/types/Forms'
-import { ChangePasswordSchema } from '../../schemas/UserSchema'
+import { ChangePasswordType } from 'shared/types/Forms'
+import { ChangePasswordSchema } from 'interface/schemas/UserSchema'
 
 export class ChangePasswordController {
 	constructor(private readonly usecase: ChangePasswordUseCase) {}
