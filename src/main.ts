@@ -6,6 +6,7 @@ import Fastify from 'fastify'
 import jwt from '@fastify/jwt'
 import rateLimit from '@fastify/rate-limit'
 import UserController from './interface/controllers/UserController'
+import ReminderController from './interface/controllers/ReminderController'
 
 dotenv.config()
 
@@ -31,6 +32,7 @@ server.get('/', (_, reply) => {
 })
 
 new UserController(server)
+new ReminderController(server)
 
 fastify.listen({ port: DEFAULT_PORT, host: '0.0.0.0' }, (err, address) => {
 	if (err) throw err
