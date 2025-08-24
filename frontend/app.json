@@ -1,0 +1,82 @@
+{
+  "expo": {
+    "name": "Remembering Medicine",
+    "slug": "remmed-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/pill_3.png",
+    "scheme": "remmed",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1a1b1d"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundImage": "./assets/images/adaptive-icon.png"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.danilo00010.remmedapp",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "https",
+              "host": "remmed.danilosanches.pro",
+              "pathPrefix": "/"
+            },
+            {
+              "scheme": "remmed"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ],
+      "permissions": [
+        "NOTIFICATIONS"
+      ]
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.danilo00010.remmedapp",
+      "associatedDomains": [
+        "applinks:remmed.danilosanches.pro"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/pill_3.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash.png",
+          "imageWIdth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#1a1b1d"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "dfec5799-c6c7-452c-a138-1fe208b6883c"
+      }
+    },
+    "owner": "danilo00010"
+  }
+}

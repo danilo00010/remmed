@@ -12,6 +12,7 @@
 		"baseUrl": "./src",
 		"paths": {
 			"@user/": ["application/usecases/User"],
+			"@reminder/": ["application/usecases/Reminder"],
 			"@prisma/": ["infrastructure/db/prisma/repositories"],
 			"@memory/": ["infrastructure/db/memory/repositories"],
 			"@errors/": ["domain/errors"]

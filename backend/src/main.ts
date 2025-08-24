@@ -3,6 +3,8 @@ import { IsBlackListedUseCase } from './application/usecases/Token/IsBlackListed
 import { PrismaTokenBlacklistRepository } from './infrastructure/db/prisma/repositories/PrismaTokenBlacklistRepository'
 import dotenv from 'dotenv'
 import Fastify from 'fastify'
+import swagger from '@fastify/swagger'
+import swaggerUi from '@fastify/swagger-ui'
 import jwt from '@fastify/jwt'
 import rateLimit from '@fastify/rate-limit'
 import UserController from './interface/controllers/UserController'
@@ -25,6 +27,33 @@ await fastify.register(rateLimit, {
 	timeWindow: '1 minute',
 })
 
+await fastify.register(swagger, {
+	swagger: {
+		info: {
+			title: 'RemMed API',
+			description: 'Documentação da API com Swagger',
+			version: '1.0.0',
+		},
+		host: `localhost:${DEFAULT_PORT}`,
+		schemes: ['http'],
+		consumes: ['application/json'],
+		produces: ['application/json'],
+	},
+})
+
+await fastify.register(swaggerUi, {
+	routePrefix: '/docs',
+	uiConfig: {
+		docExpansion: 'full',
+		deepLinking: false,
+	},
+	staticCSP: true,
+	transformSpecification: (swaggerObject, request, reply) => {
+		return swaggerObject
+	},
+	transformSpecificationClone: true,
+})
+
 const server = new FastifyServerAdapter(fastify)
 
 server.get('/', (_, reply) => {
@@ -34,7 +63,11 @@ server.get('/', (_, reply) => {
 new UserController(server)
 new ReminderController(server)
 
-fastify.listen({ port: DEFAULT_PORT, host: '0.0.0.0' }, (err, address) => {
-	if (err) throw err
-	console.log(`Server running at ${address}`)
+fastify.listen({ port: DEFAULT_PORT, host: '0.0.0.0' }, err => {
+	if (err) {
+		throw err
+	}
+
+	console.log(`Server listening on port ${DEFAULT_PORT}`)
+	console.log(`📖 Swagger docs em http://localhost:${DEFAULT_PORT}/docs`)
 })
