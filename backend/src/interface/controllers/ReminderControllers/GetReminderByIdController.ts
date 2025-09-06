@@ -1,7 +1,7 @@
-import { ReadReminderUseCase } from '@reminder/'
+import { GetReminderByIdUseCase } from '@reminder/'
 
-export class ReadReminderController {
-	constructor(private readonly usecase: ReadReminderUseCase) {}
+export class GetReminderByIdController {
+	constructor(private readonly usecase: GetReminderByIdUseCase) {}
 
 	async handle(reminderId: string, userId: string) {
 		try {

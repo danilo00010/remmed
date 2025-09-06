@@ -1,3 +1,4 @@
+export { ChangeEmailUseCase } from './ChangeEmailUseCase'
 export { ChangePasswordUseCase } from './ChangePasswordUseCase'
 export { CreateUserUseCase } from './CreateUserUseCase'
 export { DeleteUserUseCase } from './DeleteUserUseCase'

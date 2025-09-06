@@ -1,3 +1,4 @@
+export { ChangeEmailController } from './ChangeEmailController'
 export { ChangePasswordController } from './ChangePasswordController'
 export { CreateUserController } from './CreateUserController'
 export { DeleteUserController } from './DeleteUserController'

@@ -3,7 +3,7 @@ import { UserRepository } from 'domain/repositories/UserRepository'
 import { Mailer } from 'domain/services/Mailer'
 import { Token } from 'domain/services/Token'
 
-export default class ChangeEmailUseCase {
+export class ChangeEmailUseCase {
 	constructor(
 		private readonly userRepository: UserRepository,
 		private readonly token: Token,

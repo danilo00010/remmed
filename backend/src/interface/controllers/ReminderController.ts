@@ -4,7 +4,7 @@ import { Reminder } from 'domain/entities/Reminder'
 
 import {
 	CreateReminderController,
-	ReadReminderController,
+	GetReminderByIdController,
 	ListAllRemindersController,
 	UpdateReminderController,
 	DeleteReminderController,
@@ -14,7 +14,7 @@ import {
 
 import {
 	CreateReminderUseCase,
-	ReadReminderUseCase,
+	GetReminderByIdUseCase,
 	ListAllRemindersUseCase,
 	UpdateReminderUseCase,
 	DeleteReminderUseCase,
@@ -57,8 +57,8 @@ export default class ReminderController {
 		)
 
 		// READ
-		const readUseCase = new ReadReminderUseCase(reminderRepo)
-		const readController = new ReadReminderController(readUseCase)
+		const readUseCase = new GetReminderByIdUseCase(reminderRepo)
+		const readController = new GetReminderByIdController(readUseCase)
 		server.get(
 			'/reminders/:reminderId',
 			async (request, reply) => {

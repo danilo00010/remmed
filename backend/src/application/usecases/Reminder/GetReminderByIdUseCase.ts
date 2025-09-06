@@ -1,7 +1,7 @@
 import { ReminderRepository } from 'domain/repositories/ReminderRepository'
 import { Authorization } from 'domain/services/Authorization'
 
-export class ReadReminderUseCase {
+export class GetReminderByIdUseCase {
 	constructor(private readonly reminderRepository: ReminderRepository) {}
 
 	async execute(reminderId: string, userId: string) {

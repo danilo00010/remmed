@@ -4,6 +4,7 @@ import type { ChangePasswordType } from 'shared/types/Forms'
 import { User } from 'domain/entities/User'
 
 import {
+	ChangeEmailController,
 	ChangePasswordController,
 	CreateUserController,
 	DeleteUserController,
@@ -16,6 +17,7 @@ import {
 } from './UserControllers'
 
 import {
+	ChangeEmailUseCase,
 	ChangePasswordUseCase,
 	CreateUserUseCase,
 	DeleteUserUseCase,
@@ -35,8 +37,6 @@ import {
 	CrypterAdapter,
 } from 'infrastructure/security'
 import { Server } from 'domain/services/Server'
-import ChangeEmailUseCase from 'application/usecases/User/ChangeEmailUseCase'
-import ChangeEmailController from './UserControllers/ChangeEmailController'
 
 export default class UserController {
 	constructor(server: Server<FastifyRequest, FastifyReply>) {

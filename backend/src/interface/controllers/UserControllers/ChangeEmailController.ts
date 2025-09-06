@@ -1,7 +1,7 @@
-import ChangeEmailUseCase from 'application/usecases/User/ChangeEmailUseCase'
+import { ChangeEmailUseCase } from 'application/usecases/User'
 import { ChangeEmailSchema } from 'interface/schemas/UserSchema'
 
-export default class ChangeEmailController {
+export class ChangeEmailController {
 	constructor(private readonly useCase: ChangeEmailUseCase) {}
 
 	async handle(newEmail: string, userId: string) {
