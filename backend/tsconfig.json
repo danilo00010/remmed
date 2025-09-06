@@ -11,6 +11,7 @@
 		"typeRoots": ["./types", "./node_modules/@types"],
 		"baseUrl": "./src",
 		"paths": {
+			"domain/*": ["domain/*"],
 			"@user/": ["application/usecases/User"],
 			"@reminder/": ["application/usecases/Reminder"],
 			"@prisma/": ["infrastructure/db/prisma/repositories"],

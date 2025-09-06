@@ -1,6 +1,7 @@
 # dependencies
 node_modules/
 .yarn
+package-lock.json
 
 # Expo
 .expo/
@@ -37,6 +38,11 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# vscode
 .vscode/
 
+# android
 frontend/android
+
+#ngrok
+ngrok.yml

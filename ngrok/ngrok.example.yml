@@ -1,0 +1,7 @@
+version: 2
+authtoken: <your authtoken>
+
+tunnels:
+  api:
+    proto: http
+    addr: remmed-api:3000

@@ -1,0 +1,31 @@
+services:
+  remmed-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: remmed-api:latest
+    container_name: remmed-api
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+    networks:
+      - remmed
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: remmed-ngrok
+    volumes:
+      - ./ngrok/ngrok.yml:/etc/ngrok.yml
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yml"
+      - "--log=stdout"
+    ports:
+      - 4040:4040
+    networks:
+      - remmed
+networks:
+  remmed:
+    driver: bridge
