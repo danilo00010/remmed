@@ -9,5 +9,8 @@ else
   echo "node_modules found, skipping npm install"
 fi
 
+echo "Generating prisma client..."
+npx prisma generate
+
 echo "Initiating app..."
-npm run prod
+npm run dev

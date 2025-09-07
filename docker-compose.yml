@@ -3,7 +3,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: remmed-api:latest
+    image: remmed-api
     container_name: remmed-api
     ports:
       - "3000:3000"

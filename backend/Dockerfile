@@ -14,8 +14,6 @@ COPY . .
 
 RUN npm install --verbose
 
-RUN npx prisma generate
-
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 

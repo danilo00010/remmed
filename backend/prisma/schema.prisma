@@ -8,16 +8,32 @@ datasource db {
 }
 
 model User {
-  id                         String    @id @default(uuid())
+  id                         String     @id @default(uuid())
   name                       String
-  email                      String    @unique
+  email                      String     @unique
   password                   String?
   emailVerifiedAt            DateTime?
   verificationToken          String?
   verificationTokenExpiresAt DateTime?
-  createdAt                  DateTime  @default(now())
-  updatedAt                  DateTime  @updatedAt
+  createdAt                  DateTime   @default(now())
+  updatedAt                  DateTime   @updatedAt
   deletedAt                  DateTime?
+  reminders                  Reminder[]
+}
+
+model Reminder {
+  id         String    @id @default(uuid())
+  userId     String
+  name       String?
+  status     Boolean?
+  startTime  DateTime
+  interval   Int
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+  archivedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id])
 }
 
 model TokenBlacklist {
